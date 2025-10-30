@@ -1,237 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Class-10-Practice Test</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 15px;
-      background: linear-gradient(135deg, #f9f9f9, #e0f7fa);
-      color: #333;
-      font-size: 13px;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Class 10 Practice Test</title>
+<style>
+/* ==== YOUR ORIGINAL STYLE (unchanged) ==== */
+body {
+  font-family: "Segoe UI", sans-serif;
+  margin: 15px;
+  background: linear-gradient(135deg, #e0f7fa, #f9f9f9);
+  color: #333;
+  font-size: 13px;
+}
+#loginContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  text-align: center;
+  background: linear-gradient(160deg, #e0f2f1 0%, #b2dfdb 100%);
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  padding: 30px 20px;
+  max-width: 380px;
+  margin: auto;
+}
+#loginContainer img {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+#loginContainer h2 {
+  color: #004D40;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+}
+#instructionBox {
+  background: rgba(255,255,255,0.8);
+  border-left: 4px solid #00796B;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+#instructionBox ul {
+  padding-left: 18px;
+  margin: 6px 0;
+}
+#loginContainer input {
+  padding: 10px;
+  border: 2px solid #00796B;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  width: 250px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  outline: none;
+  transition: all 0.3s ease;
+}
+#loginContainer input:focus {
+  border-color: #004D40;
+  box-shadow: 0 0 6px rgba(0,121,107,0.4);
+}
+#loginContainer button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #009688, #00796B);
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+#loginContainer button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.25);
+  background: linear-gradient(135deg, #26a69a, #004D40);
+}
+#aboutBox {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #004D40;
+  background: rgba(255,255,255,0.85);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+#aboutBox strong { color: #00796B; }
 
-    #loginContainer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-    }
-
-    #loginContainer input {
-      padding: 8px;
-      border: 2px solid #00796B;
-      border-radius: 5px;
-      font-size: 14px;
-      margin-bottom: 10px;
-      width: 250px;
-    }
-
-    #loginContainer button {
-      padding: 8px 12px;
-      border: 2px solid #00796B;
-      border-radius: 5px;
-      background-color: #e0f2f1;
-      color: #004D40;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    #loginContainer button:hover {
-      background-color: #b2dfdb;
-    }
-
-    #appContainer { display: none; }
-
-    .header-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: nowrap;
-      gap: 8px;
-      margin-bottom: 12px;
-      min-width: 0;
-    }
-
-    .header-bar h1 {
-      color: #006064;
-      font-size: 16px;
-      margin: 0;
-      white-space: nowrap;
-      flex: 1;
-      min-width: 0;
-      overflow: hidden; 
-      text-overflow: ellipsis;
-    }
-
-    label {
-      font-weight: bold;
-      color: #00796B;
-      margin-right: 4px;
-      font-size: 12px;
-    }
-
-    select, button {
-      margin: 4px;
-      padding: 5px 8px;
-      border: 2px solid #00796B;
-      border-radius: 5px;
-      background-color: #e0f2f1;
-      color: #004D40;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    select:hover, button:hover { background-color: #b2dfdb; }
-
-    button.back-btn {
-      background-color: #b71c1c;
-      color: white;
-      white-space: nowrap;
-      font-size: 12px;
-      padding: 5px 10px;
-      flex-shrink: 0;
-    }
-    button.back-btn:hover { background-color: #7f0000; }
-
-    iframe {
-      width: 100%;
-      height: 450px;
-      border: 2px solid #004D40;
-      margin-top: 15px;
-      border-radius: 6px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-      transition: height 0.4s ease;
-    }
-
-    @media (max-width: 600px) {
-      body { font-size: 12px; }
-      .header-bar h1 { font-size: 14px; }
-      label { font-size: 11px; }
-      select, button { 
-        width: 100%; 
-        font-size: 11px;
-        padding: 4px 6px; 
-        margin-top: 8px; 
-      }
-      .header-bar { flex-wrap: nowrap; }
-      iframe { height: 350px; }
-    }
-
-    select { white-space: normal !important; height: auto; line-height: 1.2em; }
-    select option { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
-    select option:nth-child(even) { background-color: #e8f4ff; }
-    select option:nth-child(odd) { background-color: #ffffff; }
-
-    .hidden { display: none; }
-
-    .inline-topic {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      margin-left: auto;
-      font-size: 12px;
-    }
-  </style>
+#appContainer { display: none; }
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #e0f2f1, #ffffff);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  min-width: 0;
+}
+.header-bar h1 {
+  color: #004D40;
+  font-size: 16px;
+  margin: 0;
+  white-space: nowrap;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+label { font-weight: bold; color: #00796B; margin-right: 4px; font-size: 12px; }
+select, button {
+  margin: 4px;
+  padding: 6px 9px;
+  border: 2px solid #00796B;
+  border-radius: 6px;
+  background: linear-gradient(145deg, #e0f2f1, #ffffff);
+  color: #004D40;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+select:hover, button:hover {
+  background: linear-gradient(145deg, #b2dfdb, #e0f2f1);
+  transform: translateY(-1px);
+}
+button.back-btn {
+  background: linear-gradient(135deg, #c62828, #b71c1c);
+  color: white;
+  font-size: 11px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+  transition: all 0.3s ease;
+}
+button.back-btn:hover {
+  background: linear-gradient(135deg, #e53935, #b71c1c);
+  transform: translateY(-1px);
+}
+button.home-btn {
+  background: linear-gradient(135deg, #f57c00, #ef6c00);
+  color: white;
+  font-size: 11px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+button.home-btn:hover {
+  background: linear-gradient(135deg, #fb8c00, #e67e22);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+iframe {
+  width: 100%;
+  height: 450px;
+  border: 2px solid #004D40;
+  margin-top: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: height 0.4s ease;
+}
+@media (max-width:600px){
+  body{font-size:12px;}
+  .header-bar{
+    flex-wrap:nowrap;
+    gap:4px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .header-bar h1{font-size:13px;flex:1;white-space:nowrap;}
+  .header-bar button{flex-shrink:0;}
+  label{font-size:11px;}
+  select,button{width:100%;font-size:11px;padding:5px 7px;margin-top:6px;}
+  iframe{height:350px;}
+  #loginContainer{width:90%;padding:20px;}
+}
+select{white-space:normal!important;height:auto;line-height:1.2em;}
+select option{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;}
+select option:nth-child(even){background-color:#e8f4ff;}
+select option:nth-child(odd){background-color:#fff;}
+.hidden{display:none;}
+.inline-topic{display:flex;align-items:center;gap:4px;margin-left:auto;font-size:12px;}
+</style>
 </head>
 
 <body>
-  <div id="loginContainer">
-    <h2>Login to Class-10 Practice Test</h2>
-    <input type="email" id="emailInput" placeholder="Enter your email" required />
-    <button onclick="login()">Login</button>
+<div id="loginContainer">
+  <img src="https://i.ibb.co/WNZTWPwv/LOGO-PNG-2025-fab.png" alt="G10 Educational Platform Logo" />
+  
+  <h2>Login to Class-10 Science Practice Test</h2>
+  
+  <div id="instructionBox">
+    <strong>Instructions:</strong>
+    <ul>
+      <li>Enter your registered email ID to access practice tests.</li>
+      <li>If your email is not registered, contact: +91 9706380857.</li>
+      <li>Each test is time-bound and may include auto-submission.</li>
+      <li>Use the latest browser for the best experience.</li>
+    </ul>
   </div>
+  <input type="email" id="emailInput" placeholder="Enter your email" required />
+  <button onclick="login()">Login</button>
+  <div id="aboutBox">
+    <strong>About G10 Educational Platform:</strong><br>
+    Located at Jayanagar Charali, Beltola Bazaar Road, Guwahati, G10 is an advanced learning hub that prepares students for <b>Board Exams, IIT-JEE, NEET, and CUET</b>.  
+    <br><br>Join us to learn with clarity, discipline, and confidence.
+  </div>
+</div>
 
-  <div id="appContainer">
-    <div class="header-bar" id="headerBar">
-      <h1>Class 10 Practice Test</h1>
+<div id="appContainer">
+  <div class="header-bar" id="headerBar">
+  
+    <h1>Class 10 Science Practice Test</h1>
+	
+    <div style="display:flex; gap:4px;">
       <button id="backBtn" class="back-btn" onclick="resetAll()">Back</button>
+      <button class="home-btn" onclick="window.location.href='https://gten-educational-platform.github.io/Class-12/class 10 button.html'">🏠 Home</button>
     </div>
-
-    <div id="controls">
-      <label for="levelSelect">Level / Years:</label>
-      <select id="levelSelect">
-        <option value="">Select Level / Years</option>
-      </select>
-
-      <label for="chapterSelect">Chapter:</label>
-      <select id="chapterSelect" disabled>
-        <option value="">Select Chapter</option>
-      </select>
-    </div>
-
-    <div id="topicRow">
-      <label id="topicLabel" for="itemSelect">Topic / Year:</label>
-      <select id="itemSelect" disabled>
-        <option value="">Select Topic / Year</option>
-      </select>
-    </div>
-
-    <iframe id="viewer" src=""></iframe>
   </div>
 
-  <script>
-    const BACKEND_URL = "https://practice-test-backend-class-10-science-h42o.onrender.com";
+  <div id="controls">
+    <label for="levelSelect">Level / Types:</label>
+    <select id="levelSelect"><option value="">Select Level / Types</option></select>
+    <label for="chapterSelect">Chapter:</label>
+    <select id="chapterSelect" disabled><option value="">Select Chapter</option></select>
+    <label id="topicLabel" for="itemSelect">Topic / Year:</label>
+    <select id="itemSelect" disabled><option value="">Select Topic / Year</option></select>
+  </div>
 
-    async function login() {
-      const email = document.getElementById("emailInput").value.trim().toLowerCase();
-      if (!email || !email.includes("@")) { alert("Your E.Mail ID is not Registered. For registration call +91 9706380857."); return; }
+  <iframe id="viewer" src=""></iframe>
+</div>
 
-      const res = await fetch(`${BACKEND_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
-      });
-      const data = await res.json();
-      if (data.token) {
-        localStorage.setItem("studentEmail", email);
-        localStorage.setItem("sessionToken", data.token);
-        document.getElementById("loginContainer").style.display = "none";
-        document.getElementById("appContainer").style.display = "block";
-      } else { alert("Login failed. Try again."); }
-    }
+<script>
+const BACKEND_URL="https://practice-test-backend-class-10-science-h42o.onrender.com";
 
-    window.onload = async function() {
-      const savedEmail = localStorage.getItem("studentEmail");
-      const token = localStorage.getItem("sessionToken");
-      if (!savedEmail || !token) return;
+/* === LOGIN LOGIC === */
+async function login(){
+ const email=document.getElementById("emailInput").value.trim().toLowerCase();
+ if(!email||!email.includes("@")){
+  alert("Your E.Mail ID is not Registered. For registration call +91 9706380857.");return;
+ }
+ const res=await fetch(`${BACKEND_URL}/login`,{
+  method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})
+ });
+ const data=await res.json();
+ if(data.token){
+  localStorage.setItem("studentEmail",email);
+  localStorage.setItem("sessionToken",data.token);
+  document.getElementById("loginContainer").style.display="none";
+  document.getElementById("appContainer").style.display="block";
+ } else alert("Login failed. Try again.");
+}
 
-      const res = await fetch(`${BACKEND_URL}/validate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: savedEmail, token })
-      });
-      const data = await res.json();
-      if (data.valid) {
-        document.getElementById("loginContainer").style.display = "none";
-        document.getElementById("appContainer").style.display = "block";
-      } else { localStorage.clear(); }
-    };
+/* === SESSION VALIDATION === */
+window.onload=async function(){
+ const savedEmail=localStorage.getItem("studentEmail");
+ const token=localStorage.getItem("sessionToken");
+ if(!savedEmail||!token)return;
+ const res=await fetch(`${BACKEND_URL}/validate`,{
+  method:"POST",headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({email:savedEmail,token})
+ });
+ const data=await res.json();
+ if(data.valid){
+  document.getElementById("loginContainer").style.display="none";
+  document.getElementById("appContainer").style.display="block";
+ } else localStorage.clear();
+};
 
-    setInterval(async () => {
-      const email = localStorage.getItem("studentEmail");
-      const token = localStorage.getItem("sessionToken");
-      if (!email || !token) return;
-      const res = await fetch(`${BACKEND_URL}/validate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, token })
-      });
-      const data = await res.json();
-      if (!data.valid) {
-        alert("⚠️ You have been logged out because this account was opened on another device.");
-        localStorage.clear();
-        location.reload();
-      }
-    }, 5000);
+/* === AUTO LOGOUT === */
+setInterval(async()=>{
+ const email=localStorage.getItem("studentEmail");
+ const token=localStorage.getItem("sessionToken");
+ if(!email||!token)return;
+ const res=await fetch(`${BACKEND_URL}/validate`,{
+  method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,token})
+ });
+ const data=await res.json();
+ if(!data.valid){
+  alert("⚠️ You have been logged out because this account was opened on another device.");
+  localStorage.clear();location.reload();
+ }
+},5000);
 
-    // === Fixed Catalog JSON with unique keys ===
-   // === Fixed Catalog JSON with unique keys ===
+/* === MAIN LOGIC === */
 const catalog = {
   "Topic wise mcq (basic)": {
               "Chapter 1 - Chemical Reaction And Equation": {
@@ -468,105 +535,86 @@ const catalog = {
   }
 };
 
+const levelSelect=document.getElementById('levelSelect');
+const chapterSelect=document.getElementById('chapterSelect');
+const itemSelect=document.getElementById('itemSelect');
+const topicLabel=document.getElementById('topicLabel');
+const viewer=document.getElementById('viewer');
+const controls=document.getElementById('controls');
+const headerBar=document.getElementById('headerBar');
 
+function resetSelect(sel,txt,dis=false){sel.innerHTML=`<option value="">${txt}</option>`;sel.disabled=dis;}
+function fillSelect(sel,items){items.forEach(v=>{sel.innerHTML+=`<option value="${v}">${v}</option>`});sel.disabled=false;}
+function getKeys(o){return o?Object.keys(o):[];}
 
-    const levelSelect   = document.getElementById('levelSelect');
-    const chapterSelect = document.getElementById('chapterSelect');
-    const itemSelect    = document.getElementById('itemSelect');
-    const topicLabel    = document.getElementById('topicLabel');
-    const viewer        = document.getElementById('viewer');
-    const controls      = document.getElementById('controls');
-    const headerBar     = document.getElementById('headerBar');
-    const topicRow      = document.getElementById('topicRow');
+levelSelect.addEventListener('change',()=>{
+ const lvl=levelSelect.value;
+ resetSelect(chapterSelect,'Select Chapter',true);
+ resetSelect(itemSelect,'Select Topic / Year',true);
+ viewer.src='';
+ if(!lvl||!catalog[lvl])return;
+ fillSelect(chapterSelect,getKeys(catalog[lvl]));
+});
+chapterSelect.addEventListener('change',()=>{
+ const lvl=levelSelect.value;
+ const chap=chapterSelect.value;
+ resetSelect(itemSelect,'Select Topic / Year',true);
+ viewer.src='';
+ if(!lvl||!chap||!catalog[lvl]?.[chap])return;
+ fillSelect(itemSelect,getKeys(catalog[lvl][chap]));
+});
+itemSelect.addEventListener('change',()=>{if(itemSelect.value)loadURL();});
 
-    function resetSelect(selectEl, placeholderText, disable = false) {
-      selectEl.innerHTML = `<option value="">${placeholderText}</option>`;
-      selectEl.disabled = disable;
-    }
-    function fillSelect(selectEl, items) { items.forEach(v => { selectEl.innerHTML += `<option value="${v}">${v}</option>`; }); selectEl.disabled = false; }
-    function getKeys(obj) { return obj ? Object.keys(obj) : []; }
+function loadURL(){
+ const lvl=levelSelect.value,chap=chapterSelect.value,item=itemSelect.value;
+ if(!lvl||!chap||!item)return;
+ const url=catalog[lvl][chap][item];
+ viewer.src=url;
+ viewer.style.height="650px";
+ controls.classList.add('hidden');
 
-    levelSelect.addEventListener('change', () => {
-      const lvl = levelSelect.value;
-      resetSelect(chapterSelect, 'Select Chapter', true);
-      resetSelect(itemSelect, 'Select Topic / Year', true);
-      viewer.src = '';
-      viewer.style.height = "450px";
-      if (!lvl || !catalog[lvl]) return;
-      fillSelect(chapterSelect, getKeys(catalog[lvl]));
-    });
+ // === Move Topic Dropdown depending on device ===
+ const inlineDiv=document.createElement('div');
+ inlineDiv.className='inline-topic';
+ inlineDiv.appendChild(topicLabel);
+ inlineDiv.appendChild(itemSelect);
 
-    chapterSelect.addEventListener('change', () => {
-      const lvl  = levelSelect.value;
-      const chap = chapterSelect.value;
-      resetSelect(itemSelect, 'Select Topic / Year', true);
-      viewer.src = '';
-      viewer.style.height = "450px";
-      if (!lvl || !chap || !catalog[lvl]?.[chap]) return;
-      fillSelect(itemSelect, getKeys(catalog[lvl][chap]));
-    });
-
-    itemSelect.addEventListener('change', () => { if (itemSelect.value) loadURL(); });
-
-    function loadURL() {
-      const lvl  = levelSelect.value;
-      const chap = chapterSelect.value;
-      const item = itemSelect.value;
-      if (!lvl || !chap || !item) return;
-      const url = catalog[lvl][chap][item];
-      viewer.src = url;
-      viewer.style.height = "650px";
-      controls.classList.add('hidden');
-
-      let inlineDiv = document.createElement('div');
-      inlineDiv.className = 'inline-topic';
-      inlineDiv.appendChild(topicLabel);
-      inlineDiv.appendChild(itemSelect);
-
-      if (window.innerWidth > 600) {
-        headerBar.appendChild(inlineDiv);
-      } else {
-        topicRow.appendChild(topicLabel);
-        topicRow.appendChild(itemSelect);
-      }
-    }
-
-  function resetAll() {
-  viewer.src = '';
-  viewer.style.height = "450px";
-
-  // Reset all selects
-  resetSelect(levelSelect, 'Select Level / Years', false);
-  resetSelect(chapterSelect, 'Select Chapter', true);
-  resetSelect(itemSelect, 'Select Topic / Year', true);
-
-  // Refill Levels so user can pick again
-  fillSelect(levelSelect, getKeys(catalog));
-
-  // Show dropdown controls again
-  controls.classList.remove('hidden');
-
-  // Move topic controls back below
-  topicRow.appendChild(topicLabel);
-  topicRow.appendChild(itemSelect);
-
-  // Remove inline dropdown (if exists)
-  const inline = headerBar.querySelector('.inline-topic');
-  if (inline) inline.remove();
+ if(window.innerWidth <= 600){
+   headerBar.insertAdjacentElement('afterend', inlineDiv);
+ } else {
+   headerBar.appendChild(inlineDiv);
+ }
 }
 
+function resetAll(){
+ viewer.src='';
+ viewer.style.height="450px";
+ resetSelect(levelSelect,'Select Level / Years',false);
+ resetSelect(chapterSelect,'Select Chapter',true);
+ resetSelect(itemSelect,'Select Topic / Year',true);
+ fillSelect(levelSelect,getKeys(catalog));
+ controls.classList.remove('hidden');
 
-    window.addEventListener('resize', () => {
-      const inline = headerBar.querySelector('.inline-topic');
-      if (inline && window.innerWidth <= 600) {
-        topicRow.appendChild(topicLabel);
-        topicRow.appendChild(itemSelect);
-        inline.remove();
-      }
-    });
+ // === Remove inline Topic selector (header/below) and restore original ===
+ document.querySelectorAll('.inline-topic').forEach(el=>el.remove());
+ // restore topic label & select to control panel
+ controls.appendChild(topicLabel);
+ controls.appendChild(itemSelect);
+}
 
-    // Fill levels dropdown
-    fillSelect(levelSelect, getKeys(catalog));
-  </script>
-</body>
+fillSelect(levelSelect,getKeys(catalog));
+
+/* === MOBILE AUTO HEADER SCROLL === */
+if(window.innerWidth<=600){
+ const bar=document.getElementById("headerBar");
+ let direction=1;
+ setInterval(()=>{
+  if(bar.scrollWidth>bar.clientWidth){
+   if(bar.scrollLeft+bar.clientWidth>=bar.scrollWidth-5)direction=-1;
+   else if(bar.scrollLeft<=5)direction=1;
+   bar.scrollBy({left:50*direction,behavior:"smooth"});
+  }
+ },3000);
+}
+</script>
 </html>
