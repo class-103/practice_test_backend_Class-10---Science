@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -196,6 +197,53 @@ select option:nth-child(even){background-color:#e8f4ff;}
 select option:nth-child(odd){background-color:#fff;}
 .hidden{display:none;}
 .inline-topic{display:flex;align-items:center;gap:4px;margin-left:auto;font-size:12px;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.register-btn{
+  display:inline-block;
+  padding:10px 16px;
+  background:linear-gradient(135deg, #ff9800, #f57c00);
+  color:white;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:bold;
+  text-decoration:none;
+  box-shadow:0 4px 8px rgba(0,0,0,0.2);
+  transition:0.3s;
+}
+
+.register-btn:hover{
+  background:linear-gradient(135deg, #ffa726, #ef6c00);
+  transform:translateY(-2px);
+  box-shadow:0 6px 12px rgba(0,0,0,0.3);
+}
+
+
+
+
+
+
+
+
+
 </style>
 </head>
 
@@ -203,7 +251,7 @@ select option:nth-child(odd){background-color:#fff;}
 <div id="loginContainer">
   <img src="https://i.ibb.co/WNZTWPwv/LOGO-PNG-2025-fab.png" alt="G10 Educational Platform Logo" />
   
-  <h2>Login to Class-10 Science Practice Test</h2>
+  <h2>Login to Class 10 Practice Test</h2>
   
   <div id="instructionBox">
     <strong>Instructions:</strong>
@@ -215,6 +263,31 @@ select option:nth-child(odd){background-color:#fff;}
     </ul>
   </div>
   <input type="email" id="emailInput" placeholder="Enter your email" required />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <p id="loginError" style="color:red; font-size:13px; margin-top:5px;"></p>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <button onclick="login()">Login</button>
   <div id="aboutBox">
     <strong>About G10 Educational Platform:</strong><br>
@@ -226,7 +299,7 @@ select option:nth-child(odd){background-color:#fff;}
 <div id="appContainer">
   <div class="header-bar" id="headerBar">
   
-    <h1>Class 10 Science Practice Test</h1>
+    <h1>Class 10 Practice Test</h1>
 	
     <div style="display:flex; gap:4px;">
       <button id="backBtn" class="back-btn" onclick="resetAll()">Back</button>
@@ -249,23 +322,87 @@ select option:nth-child(odd){background-color:#fff;}
 <script>
 const BACKEND_URL="https://practice-test-backend-class-10-science-h42o.onrender.com";
 
+
+
+
+
+
+
+
+
+
 /* === LOGIN LOGIC === */
 async function login(){
  const email=document.getElementById("emailInput").value.trim().toLowerCase();
- if(!email||!email.includes("@")){
-  alert("Your E.Mail ID is not Registered. For registration call +91 9706380857.");return;
+ const errorBox = document.getElementById("loginError");
+
+ // ❗ Step 1: Format validation
+ if(!email || !email.includes("@")){
+  errorBox.innerHTML = `
+    Your E-Mail ID is not registered.<br><br>
+    <a href="https://gten-educational-platform.github.io/Class-12/email.html" target="_blank" class="register-btn">
+      Register Now
+    </a>
+  `;
+  return;
+ } else {
+  errorBox.innerHTML = "";
  }
- const res=await fetch(`${BACKEND_URL}/login`,{
-  method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})
- });
- const data=await res.json();
- if(data.token){
-  localStorage.setItem("studentEmail",email);
-  localStorage.setItem("sessionToken",data.token);
-  document.getElementById("loginContainer").style.display="none";
-  document.getElementById("appContainer").style.display="block";
- } else alert("Login failed. Try again.");
+
+ try {
+   const res=await fetch(`${BACKEND_URL}/login`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email})
+   });
+
+   const data=await res.json();
+
+   // ❗ Step 2: Backend validation
+   if(data.token){
+    localStorage.setItem("studentEmail",email);
+    localStorage.setItem("sessionToken",data.token);
+    document.getElementById("loginContainer").style.display="none";
+    document.getElementById("appContainer").style.display="block";
+   } else {
+    errorBox.innerHTML = `
+      Your E-Mail ID is not registered.<br><br>
+      <a href="https://gten-educational-platform.github.io/Class-12/email.html"
+   target="_blank"
+   class="register-btn"
+   onclick="this.style.display='none'">
+  Register Now
+</a>
+    `;
+   }
+
+ } catch (err) {
+   errorBox.innerText = "Server error. Try later.";
+ }
 }
+
+document.getElementById("emailInput").addEventListener("input", function() {
+  const errorBox = document.getElementById("loginError");
+  errorBox.innerHTML = ""; // 🔥 clears error + hides Register button
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* === SESSION VALIDATION === */
 window.onload=async function(){
@@ -298,8 +435,15 @@ setInterval(async()=>{
  }
 },5000);
 
-/* === MAIN LOGIC === */
-const catalog = {
+
+
+
+
+
+
+
+
+  const catalog = {
   "Topic wise mcq (basic)": {
               "Chapter 1 - Chemical Reaction And Equation": {
               "1. Names of Chemical Compounds": "https://class-103.github.io/Class-10-Science-10-E--Che-Rec---Equation/1. Names of Chemical Compounds.html",
@@ -420,7 +564,7 @@ const catalog = {
 	
  "Topic wise mcq (medium) ": {
             "Chapter 1 - Chemical Reaction and Equation": {
-              "1": "https://class-103.github.io/Class-10-Science-10-M--Che-Rec---Equation/1. Word equation to balance chemical eueation.html",
+              "1 Balanching word equation": "https://class-103.github.io/Class-10-Science-10-M--Che-Rec---Equation/1. Word equation to balance chemical eueation.html",
               "2 Coming soon": "htts://chemistry-g10ep.github.io/IIT-JEE--M--HTML-PDF-CHEMICAL-ARITHMETIC/6. Chemical stoichiometry -3.html"
             },
             "Chapter 2 - Coming soon": {
@@ -488,6 +632,12 @@ const catalog = {
     }
   }
 };
+   
+   
+   
+   
+   
+   
 
 const levelSelect=document.getElementById('levelSelect');
 const chapterSelect=document.getElementById('chapterSelect');
