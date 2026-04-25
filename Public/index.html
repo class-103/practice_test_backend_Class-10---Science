@@ -371,15 +371,23 @@ Please register again to renew access.<br><br>
   }
 
   // 🔥 CASE 2 : valid login
-  if (data.token) {
-    localStorage.setItem("studentEmail", email);
-    localStorage.setItem("sessionToken", data.token);
+if (data.token) {
+  localStorage.setItem("studentEmail", email);
+  localStorage.setItem("sessionToken", data.token);
 
-    document.getElementById("loginContainer").style.display = "none";
-    document.getElementById("appContainer").style.display = "block";
-    document.getElementById("viewer").src = SINGLE_LINK;
-    return;
+  document.getElementById("loginContainer").style.display = "none";
+  document.getElementById("appContainer").style.display = "block";
+  document.getElementById("viewer").src = SINGLE_LINK;
+
+  // 🔔 expiry tomorrow popup
+  if (data.expiringSoon) {
+    setTimeout(() => {
+      alert("⚠️ Your access will expire tomorrow. Please register again to renew access.");
+    }, 800);
   }
+
+  return;
+}
 
   // 🔥 CASE 3 : unregistered email
   errorBox.innerHTML = `
