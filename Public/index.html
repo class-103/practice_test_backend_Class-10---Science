@@ -336,7 +336,7 @@ async function login(){
  const email=document.getElementById("emailInput").value.trim().toLowerCase();
  const errorBox = document.getElementById("loginError");
 
- // ❗ Step 1: Format validation
+ // Step 1: email format validation
  if(!email || !email.includes("@")){
   errorBox.innerHTML = `
     Your E-mail ID not found. Click ‘Register’ to generate your login access code (looks like an e-mail).<br><br>
@@ -349,55 +349,57 @@ async function login(){
   errorBox.innerHTML = "";
  }
 
-try {
-  const res = await fetch(`${BACKEND_URL}/login`, {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ email })
-  });
+ try {
+   const res = await fetch(`${BACKEND_URL}/login`, {
+     method: "POST",
+     headers: {"Content-Type": "application/json"},
+     body: JSON.stringify({ email })
+   });
 
-  const data = await res.json();
+   const data = await res.json();
 
-  // 🔥 CASE 1 : expired account
-  if (data.expired === true) {
-    errorBox.innerHTML = `
-      Your access has expired.<br>
-Please register again to renew access.<br><br>
-      <a href="https://gten-educational-platform.github.io/Class-12/email.html" target="_blank" class="register-btn">
-        Renew Access
-      </a>
-    `;
-    return;
-  }
+   // 🔥 CASE 1 : expired account
+   if (data.expired === true) {
+     errorBox.innerHTML = `
+       Your access has expired.<br>
+       Please register again to renew access.<br><br>
+       <a href="https://gten-educational-platform.github.io/Class-12/email.html" target="_blank" class="register-btn">
+         Renew Access
+       </a>
+     `;
+     return;
+   }
 
-  // 🔥 CASE 2 : valid login
-// 🔥 CASE 2 : valid login
-if (data.token) {
-  localStorage.setItem("studentEmail", email);
-  localStorage.setItem("sessionToken", data.token);
+   // 🔥 CASE 2 : valid login
+   if (data.token) {
+     localStorage.setItem("studentEmail", email);
+     localStorage.setItem("sessionToken", data.token);
 
-  document.getElementById("loginContainer").style.display = "none";
-  document.getElementById("appContainer").style.display = "block";
+     document.getElementById("loginContainer").style.display = "none";
+     document.getElementById("appContainer").style.display = "block";
 
-  // 🔔 expiry tomorrow popup
-  if (data.expiringSoon) {
-    setTimeout(() => {
-      alert("⚠️ Your access will expire tomorrow. Please register again to renew access.");
-    }, 800);
-  }
+     if (data.expiringSoon) {
+       const d = new Date(data.expiryDate);
+       const formattedDate =
+         String(d.getDate()).padStart(2,'0') + "/" +
+         String(d.getMonth()+1).padStart(2,'0') + "/" +
+         d.getFullYear();
 
-  return;
-}
+       setTimeout(() => {
+         alert(`⚠️ Your access will expire on ${formattedDate}. Please register again to renew access.`);
+       }, 800);
+     }
 
-  // 🔥 CASE 3 : unregistered email
-  errorBox.innerHTML = `
-    Your E-mail ID not found. Click ‘Register’ to generate your login access code (looks like an e-mail).<br><br>
-    <a href="https://gten-educational-platform.github.io/Class-12/email.html" target="_blank" class="register-btn">
-      Register Now
-    </a>
-  `;
+     return;
+   }
 
-
+   // 🔥 CASE 3 : unregistered email
+   errorBox.innerHTML = `
+     Your E-mail ID not found. Click ‘Register’ to generate your login access code (looks like an e-mail).<br><br>
+     <a href="https://gten-educational-platform.github.io/Class-12/email.html" target="_blank" class="register-btn">
+       Register Now
+     </a>
+   `;
 
  } catch (err) {
    errorBox.innerText = "Server error. Try later.";
@@ -457,11 +459,17 @@ window.onload = async function() {
     document.getElementById("appContainer").style.display = "block";
 
     // 🔔 expiry tomorrow popup
-    if (data.expiringSoon) {
-      setTimeout(() => {
-        alert("⚠️ Your access will expire tomorrow. Please register again to renew access.");
-      }, 800);
-    }
+if (data.expiringSoon) {
+  const d = new Date(data.expiryDate);
+  const formattedDate =
+    String(d.getDate()).padStart(2,'0') + "/" +
+    String(d.getMonth()+1).padStart(2,'0') + "/" +
+    d.getFullYear();
+
+  setTimeout(() => {
+    alert(`⚠️ Your access will expire on ${formattedDate}. Please register again to renew access.`);
+  }, 800);
+}
 
   } else {
     localStorage.clear();
