@@ -7,52 +7,57 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔥 Load students with expiry date
+// 🔥 Load allowed emails with expiry
 let students = JSON.parse(fs.readFileSync("students.json"));
 
-// Store active sessions
+// 🔐 Store active sessions
 let activeSessions = {};
 
-// 🔹 Function to check expiry (NEW LOGIC)
+// 🔹 Check expiry (using expiresOn)
 function isExpired(expiresOn) {
   const expiryDate = new Date(expiresOn);
   const today = new Date();
   return today > expiryDate;
 }
 
-// === POST /login ===
+// === LOGIN ===
 app.post("/login", (req, res) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ error: "Email is required" });
+  const { email, deviceId } = req.body;
+  if (!email) return res.status(400).json({ error: "Email required" });
 
   const normalizedEmail = email.toLowerCase();
 
-  // 🔍 Find student
+  // 🔍 Check ONLY allowed emails
   const student = students.find(
     s => s.email.toLowerCase() === normalizedEmail
   );
 
+  // ❌ Not allowed
   if (!student) {
-    return res.status(401).json({ error: "Email not allowed" });
+    return res.json({ notAllowed: true });
   }
 
-  // 🔥 CHECK EXPIRY (NEW FIELD)
+  // 🔥 Check expiry
   if (isExpired(student.expiresOn)) {
     return res.json({ expired: true });
   }
 
-  // Generate token
+  // 🔐 Single device login
   const token = Math.random().toString(36).substring(2);
-  activeSessions[normalizedEmail] = token;
+  activeSessions[normalizedEmail] = {
+    token,
+    deviceId
+  };
 
-  console.log(`✅ Login: ${normalizedEmail}`);
+  console.log("✅ Login:", normalizedEmail);
+
   res.json({ token });
 });
 
-
-// === POST /validate ===
+// === VALIDATE ===
 app.post("/validate", (req, res) => {
-  const { email, token } = req.body;
+  const { email, token, deviceId } = req.body;
+
   if (!email || !token) return res.json({ valid: false });
 
   const normalizedEmail = email.toLowerCase();
@@ -61,19 +66,31 @@ app.post("/validate", (req, res) => {
     s => s.email.toLowerCase() === normalizedEmail
   );
 
+  // ❌ Not allowed
   if (!student) return res.json({ valid: false });
 
-  // 🔥 CHECK EXPIRY AGAIN (VERY IMPORTANT)
+  // 🔥 Check expiry again
   if (isExpired(student.expiresOn)) {
     return res.json({ valid: false, expired: true });
   }
 
-  const valid = activeSessions[normalizedEmail] === token;
+  const session = activeSessions[normalizedEmail];
 
-  res.json({ valid });
+  // 🔐 Check token + device
+  if (!session) return res.json({ valid: false });
+
+  if (session.token !== token) {
+    return res.json({ valid: false });
+  }
+
+  if (session.deviceId !== deviceId) {
+    return res.json({ valid: false });
+  }
+
+  res.json({ valid: true });
 });
 
-// Serve frontend
+// === STATIC FILES ===
 app.use(express.static(path.join(__dirname, "Public")));
 
 app.get("/", (req, res) => {
