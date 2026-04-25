@@ -7,57 +7,58 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔥 Load allowed emails with expiry
+// 🔥 Load students with registration date
 let students = JSON.parse(fs.readFileSync("students.json"));
 
-// 🔐 Store active sessions
+// Store active sessions
 let activeSessions = {};
 
-// 🔹 Check expiry (using expiresOn)
-function isExpired(expiresOn) {
-  const expiryDate = new Date(expiresOn);
+const EXPIRY_DAYS = 365;
+
+// 🔹 Function to check expiry
+function isExpired(registeredOn) {
+  const regDate = new Date(registeredOn);
   const today = new Date();
-  return today > expiryDate;
+
+  const diffTime = today - regDate;
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+  return diffDays > EXPIRY_DAYS;
 }
 
-// === LOGIN ===
+// === POST /login ===
 app.post("/login", (req, res) => {
-  const { email, deviceId } = req.body;
-  if (!email) return res.status(400).json({ error: "Email required" });
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: "Email is required" });
 
   const normalizedEmail = email.toLowerCase();
 
-  // 🔍 Check ONLY allowed emails
+  // 🔍 Find student
   const student = students.find(
     s => s.email.toLowerCase() === normalizedEmail
   );
 
-  // ❌ Not allowed
   if (!student) {
-    return res.json({ notAllowed: true });
+    return res.status(401).json({ error: "Email not allowed" });
   }
 
-  // 🔥 Check expiry
-  if (isExpired(student.expiresOn)) {
+  // 🔥 CHECK EXPIRY
+  if (isExpired(student.registeredOn)) {
     return res.json({ expired: true });
   }
 
-  // 🔐 Single device login
+  // Generate token
   const token = Math.random().toString(36).substring(2);
-  activeSessions[normalizedEmail] = {
-    token,
-    deviceId
-  };
+  activeSessions[normalizedEmail] = token;
 
-  console.log("✅ Login:", normalizedEmail);
-
+  console.log(`✅ Login: ${normalizedEmail}`);
   res.json({ token });
 });
 
-// === VALIDATE ===
-app.post("/validate", (req, res) => {
-  const { email, token, deviceId } = req.body;
 
+// === POST /validate ===
+app.post("/validate", (req, res) => {
+  const { email, token } = req.body;
   if (!email || !token) return res.json({ valid: false });
 
   const normalizedEmail = email.toLowerCase();
@@ -66,31 +67,19 @@ app.post("/validate", (req, res) => {
     s => s.email.toLowerCase() === normalizedEmail
   );
 
-  // ❌ Not allowed
   if (!student) return res.json({ valid: false });
 
-  // 🔥 Check expiry again
-  if (isExpired(student.expiresOn)) {
+  // 🔥 CHECK EXPIRY AGAIN (VERY IMPORTANT)
+  if (isExpired(student.registeredOn)) {
     return res.json({ valid: false, expired: true });
   }
 
-  const session = activeSessions[normalizedEmail];
+  const valid = activeSessions[normalizedEmail] === token;
 
-  // 🔐 Check token + device
-  if (!session) return res.json({ valid: false });
-
-  if (session.token !== token) {
-    return res.json({ valid: false });
-  }
-
-  if (session.deviceId !== deviceId) {
-    return res.json({ valid: false });
-  }
-
-  res.json({ valid: true });
+  res.json({ valid });
 });
 
-// === STATIC FILES ===
+// Serve frontend
 app.use(express.static(path.join(__dirname, "Public")));
 
 app.get("/", (req, res) => {
