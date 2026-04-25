@@ -371,13 +371,13 @@ Please register again to renew access.<br><br>
   }
 
   // 🔥 CASE 2 : valid login
+// 🔥 CASE 2 : valid login
 if (data.token) {
   localStorage.setItem("studentEmail", email);
   localStorage.setItem("sessionToken", data.token);
 
   document.getElementById("loginContainer").style.display = "none";
   document.getElementById("appContainer").style.display = "block";
-  document.getElementById("viewer").src = SINGLE_LINK;
 
   // 🔔 expiry tomorrow popup
   if (data.expiringSoon) {
@@ -432,7 +432,10 @@ window.onload = async function() {
   const email = localStorage.getItem("studentEmail");
   const token = localStorage.getItem("sessionToken");
 
-  if (!email || !token) return;
+  if (!email || !token) {
+    fillSelect(levelSelect,getKeys(catalog));
+    return;
+  }
 
   const res = await fetch(`${BACKEND_URL}/validate`, {
     method: "POST",
@@ -442,29 +445,28 @@ window.onload = async function() {
 
   const data = await res.json();
 
-  // 🔥 Handle expiry first
   if (data.expired) {
     alert("Your access has expired. Please renew.");
     localStorage.clear();
+    fillSelect(levelSelect,getKeys(catalog));
     return;
   }
 
-  // ✅ ONLY allow if valid
-if (data.valid) {
-  document.getElementById("loginContainer").style.display = "none";
-  document.getElementById("appContainer").style.display = "block";
-  document.getElementById("viewer").src = SINGLE_LINK;
+  if (data.valid) {
+    document.getElementById("loginContainer").style.display = "none";
+    document.getElementById("appContainer").style.display = "block";
 
-  // 🔔 expiry tomorrow popup
-  if (data.expiringSoon) {
-    setTimeout(() => {
-      alert("⚠️ Your access will expire tomorrow. Please register again to renew access.");
-    }, 800);
+    // 🔔 expiry tomorrow popup
+    if (data.expiringSoon) {
+      setTimeout(() => {
+        alert("⚠️ Your access will expire tomorrow. Please register again to renew access.");
+      }, 800);
+    }
+
+  } else {
+    localStorage.clear();
+    fillSelect(levelSelect,getKeys(catalog));
   }
-
-} else {
-  localStorage.clear();
-}
 };
 
 
