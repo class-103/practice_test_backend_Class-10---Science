@@ -357,6 +357,34 @@ async function login(){
    });
 
    const data=await res.json();
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   // 🔥 Change for 365 ADD THIS BLOCK HERE
+if (data.expired) {
+  errorBox.innerHTML = `
+    Your access has expired (365 days completed).<br><br>
+    <a href="https://gten-educational-platform.github.io/Class-12/email.html" target="_blank" class="register-btn">
+      Renew Access
+    </a>
+  `;
+  return;
+}
+
+   
+   
+   
+   
+   
+   
+   
+   
 
    // ❗ Step 2: Backend validation
    if(data.token){
@@ -404,36 +432,83 @@ document.getElementById("emailInput").addEventListener("input", function() {
 
 
 
-/* === SESSION VALIDATION === */
-window.onload=async function(){
- const savedEmail=localStorage.getItem("studentEmail");
- const token=localStorage.getItem("sessionToken");
- if(!savedEmail||!token)return;
- const res=await fetch(`${BACKEND_URL}/validate`,{
-  method:"POST",headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({email:savedEmail,token})
- });
- const data=await res.json();
- if(data.valid){
-  document.getElementById("loginContainer").style.display="none";
-  document.getElementById("appContainer").style.display="block";
- } else localStorage.clear();
+/* === Change for 365 SESSION VALIDATION === */
+window.onload = async function() {
+  const email = localStorage.getItem("studentEmail");
+  const token = localStorage.getItem("sessionToken");
+
+  if (!email || !token) return;
+
+  const res = await fetch(`${BACKEND_URL}/validate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, token })
+  });
+
+  const data = await res.json();
+
+  // 🔥 Handle expiry first
+  if (data.expired) {
+    alert("Your access has expired. Please renew.");
+    localStorage.clear();
+    return;
+  }
+
+  // ✅ ONLY allow if valid
+  if (data.valid) {
+    document.getElementById("loginContainer").style.display = "none";
+    document.getElementById("appContainer").style.display = "block";
+    document.getElementById("viewer").src = SINGLE_LINK;
+  } else {
+    localStorage.clear();
+  }
 };
 
-/* === AUTO LOGOUT === */
-setInterval(async()=>{
- const email=localStorage.getItem("studentEmail");
- const token=localStorage.getItem("sessionToken");
- if(!email||!token)return;
- const res=await fetch(`${BACKEND_URL}/validate`,{
-  method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,token})
- });
- const data=await res.json();
- if(!data.valid){
-  alert("⚠️ You have been logged out because this account was opened on another device.");
-  localStorage.clear();location.reload();
- }
-},5000);
+
+
+
+
+
+
+
+
+
+
+
+/* === change for 365days === */
+setInterval(async () => {
+  const email = localStorage.getItem("studentEmail");
+  const token = localStorage.getItem("sessionToken");
+
+  if (!email || !token) return;
+
+  const res = await fetch(`${BACKEND_URL}/validate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, token })
+  });
+
+  const data = await res.json();
+
+  // 🔥 HANDLE EXPIRY FIRST
+  if (data.expired) {
+    alert("Your access has expired. Please renew.");
+    localStorage.clear();
+    location.reload();
+    return;
+  }
+
+  // 🔐 HANDLE OTHER DEVICE LOGIN
+  if (!data.valid) {
+    alert("⚠️ You have been logged out because this account was opened on another device.");
+    localStorage.clear();
+    location.reload();
+  }
+}, 5000);
+
+
+
+
 
 
 
