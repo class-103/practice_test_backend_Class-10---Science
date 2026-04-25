@@ -457,6 +457,7 @@ window.onload = async function() {
   if (data.valid) {
     document.getElementById("loginContainer").style.display = "none";
     document.getElementById("appContainer").style.display = "block";
+	  fillSelect(levelSelect,getKeys(catalog));
 
     // 🔔 expiry tomorrow popup
 if (data.expiringSoon) {
@@ -473,7 +474,7 @@ if (data.expiringSoon) {
 
   } else {
     localStorage.clear();
-    fillSelect(levelSelect,getKeys(catalog));
+   
   }
 };
 
