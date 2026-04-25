@@ -349,60 +349,48 @@ async function login(){
   errorBox.innerHTML = "";
  }
 
- try {
-   const res=await fetch(`${BACKEND_URL}/login`,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({email})
-   });
+try {
+  const res = await fetch(`${BACKEND_URL}/login`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ email })
+  });
 
-   const data=await res.json();
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   // 🔥 Change for 365 ADD THIS BLOCK HERE
-if (data.expired) {
+  const data = await res.json();
+
+  // 🔥 CASE 1 : expired account
+  if (data.expired === true) {
+    errorBox.innerHTML = `
+      Your access has expired.<br><br>
+      <a href="https://gten-educational-platform.github.io/Class-12/email.html" target="_blank" class="register-btn">
+        Renew Access
+      </a>
+    `;
+    return;
+  }
+
+  // 🔥 CASE 2 : valid login
+  if (data.token) {
+    localStorage.setItem("studentEmail", email);
+    localStorage.setItem("sessionToken", data.token);
+
+    document.getElementById("loginContainer").style.display = "none";
+    document.getElementById("appContainer").style.display = "block";
+    document.getElementById("viewer").src = SINGLE_LINK;
+    return;
+  }
+
+  // 🔥 CASE 3 : unregistered email
   errorBox.innerHTML = `
-    Your access has expired (365 days completed).<br><br>
+    Your E-Mail ID is not registered.<br><br>
     <a href="https://gten-educational-platform.github.io/Class-12/email.html" target="_blank" class="register-btn">
-      Renew Access
+      Register Now
     </a>
   `;
-  return;
+
+} catch (err) {
+  errorBox.innerText = "Server error. Try later.";
 }
-
-   
-   
-   
-   
-   
-   
-   
-   
-
-   // ❗ Step 2: Backend validation
-   if(data.token){
-    localStorage.setItem("studentEmail",email);
-    localStorage.setItem("sessionToken",data.token);
-    document.getElementById("loginContainer").style.display="none";
-    document.getElementById("appContainer").style.display="block";
-   } else {
-    errorBox.innerHTML = `
-      Your E-Mail ID is not registered.<br><br>
-      <a href="https://gten-educational-platform.github.io/Class-12/email.html"
-   target="_blank"
-   class="register-btn"
-   onclick="this.style.display='none'">
-  Register Now
-</a>
-    `;
-   }
 
  } catch (err) {
    errorBox.innerText = "Server error. Try later.";
